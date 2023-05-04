@@ -1,18 +1,36 @@
 {
   "settings": [
     {
-      "id": "year",
-      "name": "The year.",
-      "description": "Insert description for the year setting setting",
-      "defaultValue": 2022,
+      "id": "percent",
+      "name": "Percent.",
+      "description": "Percentage level for home-range size estimation",
+      "defaultValue": 95,
+      "type": "INTEGER"
+    },
+    {
+      "id": "res",
+      "name": "Resolution.",
+      "description": "A number giving the size of the pixel over the UD should be estimated. Unit: `metres`.",
+      "defaultValue": 200,
       "type": "INTEGER"
     }
   ],
   "dependencies": {
     "R": [
       {
-        "name": "lubridate",
-        "version": "1.7.10"
+        "name": "sf"
+      },
+      {
+        "name": "adehabitatHR"
+      },
+      {
+        "name": "dplyr"
+      },
+      {
+        "name": "withr"
+      },
+      {
+        "name": "mapview"
       },
       {
         "name": "move"
@@ -25,39 +43,30 @@
   },
   "language": "eng",
   "keywords": [
-    "example",
-    "template"
+    "home range"
   ],
   "people": [
     {
-      "firstName": "Charles",
+      "firstName": "Chloe",
       "middleInitials": null,
-      "lastName": "Darwin",
-      "email": "creator@example.com",
+      "lastName": "Beaupre",
+      "email": "beauprechloe@gmail.com",
       "roles": [
         "author",
         "creator"
       ],
       "orcid": null,
-      "affiliation": null,
+      "affiliation": "SUNY - ESF",
       "affiliationRor": null
     }
   ],
   "funding": [
     {
-      "name": "funder name",
-      "comment": "grant for App"
-    }
-  ],
-  "references": [
-    {
-      "type": "IsDescribedBy",
-      "note": "Darwin, C. 1900. The creation. Journal XY. 1-2",
-      "url": "https://anylink.xyz"
+      "name": ""
     }
   ],
   "documentation": {
-    "url": "https://github.com/yourAccount/my-app/README.md"
+    "url": "https://github.com/chlobeau/moveAppHomeRange/README.md"
   }
 }
 
