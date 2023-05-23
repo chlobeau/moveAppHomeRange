@@ -1,5 +1,3 @@
-library('move')
-
 #remotes::install_gitlab("bartk/move2")
 library('move2')
 
@@ -9,10 +7,6 @@ library('dplyr')
 library('withr')
 library('mapview')
 
-df <-  
-
-df
-
 
 ## The parameter "data" is reserved for the data object passed on from the previous app
 
@@ -20,14 +14,11 @@ df
 # logger.fatal(), logger.error(), logger.warn(), logger.info(), logger.debug(), logger.trace()
 
 rFunction = function(data, percent = 95, res = 200){
-  sf <- st_as_sf(data)
-  sf$individual.local.identifier <- as(data, "data.frame")$individual.local.identifier
-  coords.sf <- st_coordinates(sf)
-  coords.sp <- SpatialPoints(coords = coords.sf)
-  kernel <- adehabitatHR::kernelUD(coords.sp, grid = res) %>% getverticeshr(percent)
+  coords.sf <- st_coordinates(data) %>% na.omit
+  kernel <- adehabitatHR::kernelUD(SpatialPoints(coords.sf), grid = res) %>% getverticeshr(percent)
   poly <- st_as_sf(kernel) %>% st_cast("POLYGON")
   poly$area <- st_area(poly)
-  ud <- poly[which.max(poly$area),] %>% st_set_crs(st_crs(sf))
+  ud <- poly[which.max(poly$area),] %>% st_set_crs(st_crs(data))
   names(ud)[names(ud) == "area"] <- paste0("area (km2) - ", percent, "% KUD")
   ud$id <- paste0("homerange - ", percent, "% KUD")
   
@@ -36,8 +27,8 @@ rFunction = function(data, percent = 95, res = 200){
   write.csv(kud.df,file=appArtifactPath("KUD_areas.csv"),row.names=FALSE)
   
   # mapview
-  locs <- sf[seq(from = 1, to = nrow(sf), by = 10),] %>% mutate(individual = individual.local.identifier)
-  m <- mapview(ud["id"]) + mapview(locs, zcol = "individual")
+  locs <- data[seq(from = 1, to = nrow(data), by = 10),] %>% data.frame %>% st_as_sf
+  m <- mapview(ud["id"]) + mapview(locs, zcol = "individual.local.identifier")
   
   html_fl = appArtifactPath(paste0("UD_", percent, "p_", res, "m.html"))
   
@@ -61,5 +52,5 @@ rFunction = function(data, percent = 95, res = 200){
   file.copy(file.path(tmp, file_zip), zipfile, overwrite = T)
   
   
-  return(ud)
+  return(data)
 }
