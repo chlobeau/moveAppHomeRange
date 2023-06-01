@@ -14,7 +14,15 @@ library('mapview')
 # logger.fatal(), logger.error(), logger.warn(), logger.info(), logger.debug(), logger.trace()
 
 rFunction = function(data, percent = 95, res = 200){
+  
   coords.sf <- st_coordinates(data) %>% na.omit
+  
+  if(nrow(coords.sf < 5))
+  {
+    logger.info("Data need to include at least 5 locations to run kernel UD function. Returning NULL.")
+    result <- NULL
+  } else
+  {
   kernel <- adehabitatHR::kernelUD(SpatialPoints(coords.sf), grid = res) %>% getverticeshr(percent)
   poly <- st_as_sf(kernel) %>% st_cast("POLYGON")
   poly$area <- st_area(poly)
@@ -50,7 +58,7 @@ rFunction = function(data, percent = 95, res = 200){
   withr::with_dir(tmp, zip(file_zip, list.files()))
   
   file.copy(file.path(tmp, file_zip), zipfile, overwrite = T)
-  
+  }
   
   return(data)
 }

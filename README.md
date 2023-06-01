@@ -12,7 +12,7 @@ The output consists of (i) a zipped shapefile (.jpeg) with the home-range polygo
 
 
 ### Input data
-MoveStack in Movebank format
+Move2 object in Movebank format. 
 
 ### Output data
 
@@ -34,4 +34,6 @@ No output is produced to be used in subsequent apps.
 
 `Resolution` (res): A number giving the size of the pixel over the UD should be estimated. Unit: `metres`.
 
+### Null or error handling
 
+App returns NULL if there are fewer than 5 locations in the Move2 object.
