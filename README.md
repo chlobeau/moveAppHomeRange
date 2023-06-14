@@ -8,7 +8,7 @@ Github repository: https://github.com/chlobeau/moveAppsHomeRange
 The app generates a shapefile and an interactive plot of kernel home-range at the desired percent level estimated using the R package `adehabitatHR`.
 
 ## Documentation
-The output consists of (i) a zipped shapefile (.jpeg) with the home-range polygon; (ii) an interactive map (.html) with the input points and home-range polygon on a background map
+The output consists of (i) a zipped shapefile (.shp) with the home-range polygon; (ii) an interactive map (.html) with the input points and home-range polygon on a background map
 
 
 ### Input data
@@ -16,7 +16,7 @@ Move2 object in Movebank format.
 
 ### Output data
 
-No output is produced to be used in subsequent apps.
+App returns move2_loc, no additional output is produced to be used in subsequent apps.
 
 
 ### Artefacts
