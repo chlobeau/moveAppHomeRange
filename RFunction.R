@@ -25,7 +25,7 @@ rFunction = function(data, percent = 95, res = 200){
   
   
   
-  if(nrow(coords.sf < 5))
+  if(nrow(coords.sf) < 5) # wrong brackets here have led to error all the time: "Data need to include at least 5 locations to run kernel UD function. Returning NULL."
   {
     logger.info("Data need to include at least 5 locations to run kernel UD function. Returning NULL.")
     result <- NULL
