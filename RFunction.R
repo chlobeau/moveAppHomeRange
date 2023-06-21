@@ -6,7 +6,7 @@ library('adehabitatHR')
 library('dplyr')
 library('withr')
 library('mapview')
-
+library('zip')
 
 ## The parameter "data" is reserved for the data object passed on from the previous app
 
@@ -15,7 +15,15 @@ library('mapview')
 
 rFunction = function(data, percent = 95, res = 200){
   
-  coords.sf <- st_coordinates(data) %>% na.omit
+  if(sum(class(data) %in% "sf") < 1){
+    data <- data %>% st_as_sf
+    coords.sf <- st_coordinates(data) %>% na.omit
+  } else
+  {
+    coords.sf <- st_coordinates(data) %>% na.omit
+  }
+  
+  
   
   if(nrow(coords.sf < 5))
   {
@@ -38,9 +46,15 @@ rFunction = function(data, percent = 95, res = 200){
   locs <- data[seq(from = 1, to = nrow(data), by = 10),] %>% data.frame %>% st_as_sf
   m <- mapview(ud["id"]) + mapview(locs, zcol = "individual.local.identifier")
   
-  html_fl = appArtifactPath(paste0("UD_", percent, "p_", res, "m.html"))
+  dir.create(targetDirHtmlFiles <- tempdir())
   
-  mapview::mapshot(m, url = html_fl)
+  mapview::mapshot(m, url = file.path(targetDirHtmlFiles,
+                                      paste0("UD_", percent, "p_", res, "m.html")))
+  zip_file <- appArtifactPath(paste0("map_html_files.zip"))
+  zip::zip(zip_file, 
+           files = list.files(targetDirHtmlFiles, full.names = TRUE,
+                              pattern="^map_"),
+           mode = "cherry-pick")
   
   # zip shapefile
   temp_shp <- tempdir()

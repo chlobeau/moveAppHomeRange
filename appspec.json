@@ -35,6 +35,9 @@
       {
         "name": "move2"
       }
+      {
+        "name": "zip"
+      }
     ]
   },
   "createsArtifacts": true,
@@ -66,7 +69,7 @@
     }
   ],
   "documentation": {
-    "url": "https://github.com/chlobeau/moveAppHomeRange/README.md"
+    "url": "https://github.com/chlobeau/moveAppHomeRange/blob/master/README.md"
   }
 }
 
