@@ -15,17 +15,14 @@ library('zip')
 
 rFunction = function(data, percent = 95, res = 200){
   
-  if(sum(class(data) %in% "sf") < 1){
-    data <- data %>% st_as_sf
+  if(sum(class(data) %in% "move2") < 1){
+    data <- mt_as_move2(data) 
     coords.sf <- st_coordinates(data) %>% na.omit
   } else
   {
     coords.sf <- st_coordinates(data) %>% na.omit
   }
-  
-  
-  
-  if(nrow(coords.sf < 5))
+  if(nrow(coords.sf) < 5)
   {
     logger.info("Data need to include at least 5 locations to run kernel UD function. Returning NULL.")
     result <- NULL
@@ -43,8 +40,8 @@ rFunction = function(data, percent = 95, res = 200){
   write.csv(kud.df,file=appArtifactPath("KUD_areas.csv"),row.names=FALSE)
   
   # mapview
-  locs <- data[seq(from = 1, to = nrow(data), by = 10),] %>% data.frame %>% st_as_sf
-  m <- mapview(ud["id"]) + mapview(locs, zcol = "individual.local.identifier")
+  locs <- data[seq(from = 1, to = nrow(data), by = 10),] %>% data.frame %>% st_as_sf 
+  m <- mapview(ud["id"]) + mapview(locs, zcol = "track")
   
   dir.create(targetDirHtmlFiles <- tempdir())
   
