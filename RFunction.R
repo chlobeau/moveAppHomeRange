@@ -43,15 +43,17 @@ rFunction = function(data, percent = 95, res = 200){
   locs <- data[seq(from = 1, to = nrow(data), by = 10),] %>% data.frame %>% st_as_sf 
   m <- mapview(ud["id"]) + mapview(locs, zcol = "track")
   
+  # output html maps
+  # create temporary directory
   dir.create(targetDirHtmlFiles <- tempdir())
   
-  mapview::mapshot(m, url = file.path(targetDirHtmlFiles,
-                                      paste0("UD_", percent, "p_", res, "m.html")))
-  zip_file <- appArtifactPath(paste0("map_html_files.zip"))
-  zip::zip(zip_file, 
-           files = list.files(targetDirHtmlFiles, full.names = TRUE,
-                              pattern="^map_"),
-           mode = "cherry-pick")
+  mapshot(m, url = file.path(targetDirHtmlFiles, paste0("UD_", percent, "p_", res, "m.html")))
+  
+   zip_file <- appArtifactPath(paste0("map_html_files.zip"))
+   zip::zip(zip_file, 
+            files = list.files(targetDirHtmlFiles, full.names = TRUE,
+                               pattern="^UD_"),
+            mode = "cherry-pick")
   
   # zip shapefile
   temp_shp <- tempdir()
