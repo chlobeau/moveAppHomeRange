@@ -13,7 +13,7 @@ library('zip')
 ## to display messages to the user in the log file of the App in MoveApps one can use the function from the logger.R file: 
 # logger.fatal(), logger.error(), logger.warn(), logger.info(), logger.debug(), logger.trace()
 
-rFunction = function(data, percent = 95, res = 200){
+rFunction = function(data, percent = 95, res = 60){
   
   if(sum(class(data) %in% "move2") < 1){
     data <- mt_as_move2(data) 
