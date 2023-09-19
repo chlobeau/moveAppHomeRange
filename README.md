@@ -7,7 +7,7 @@ Github repository: https://github.com/chlobeau/moveAppsHomeRange
 ## Description
 This app uses kernel density estimation to define the utilization distribution. See Worton (1989) to learn more about kernel density estimation.
 
-The app generates a shapefile and an interactive plot of kernel home-range at the desired percent level estimated using the R package `adehabitatHR`. It generates a single polygon and home-range area value that includes all individuals in the dataset (population level, not individual level).
+The app generates a shapefile and an interactive plot of kernel home-range at the desired percent level estimated using the R package `adehabitatHR`. It generates a single polygon and home-range area value that includes all individuals in the dataset (population level) as well and polygons for each individual's home range.
 
 To account for autocorrelation in the data we recommend filtering to one location per week.
 
@@ -17,7 +17,7 @@ Worton, B. J. (1989) Kernel methods for estimating the utilization distribution 
 Calenge, C. (2006) The package adehabitat for the R software: a tool for the analysis of space and habitat use by animals. Ecological Modelling, 197, 516-519
 
 ## Documentation
-The output consists of (i) a zipped shapefile (.shp) with the home-range polygon; (ii) an interactive map (.html) with the input points and home-range polygon on a background map
+The output consists of (i) a zipped shapefile (.shp) with the home-range polygon for the population and each individual; (ii) an interactive map (.html) with the input points and home-range polygons on a background map
 
 
 ### Input data
@@ -41,8 +41,8 @@ App returns move2_loc, no additional output is produced to be used in subsequent
 
 `Percent` (percent): Defined percentage level to estimate KUD polygon.
 
-`Resolution` (res): A number giving the size of the pixel over the UD should be estimated. Unit: `metres`. Default is 60.
+`Resolution` (res): A number giving the size of the pixel over the UD should be estimated. Unit: `metres`. Default is 200.
 
 ### Null or error handling
 
-App returns NULL if there are fewer than 5 locations in the Move2 object.
+App returns NULL if there are fewer than 5 locations for all individuals.
