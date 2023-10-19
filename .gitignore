@@ -2,5 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
-data/output
-ignore
+.DS_Store
+data/output/**
+!data/output/.keep
