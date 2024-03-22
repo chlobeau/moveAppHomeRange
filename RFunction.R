@@ -103,7 +103,6 @@ rFunction = function(data, percent = 95, res = 200){
     
     }
     
-    
+  return(data)  
   }
-  return(data)
-}
+  
