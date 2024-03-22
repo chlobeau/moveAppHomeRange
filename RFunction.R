@@ -5,6 +5,7 @@ library('adehabitatHR')
 library('plyr')
 library('withr')
 library('mapview')
+library('webshot')
 library('zip')
 
 ## The parameter "data" is reserved for the data object passed on from the previous app
