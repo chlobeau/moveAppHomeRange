@@ -24,13 +24,16 @@
         "name": "adehabitatHR"
       },
       {
-        "name": "dplyr"
+        "name": "plyr"
       },
       {
         "name": "withr"
       },
       {
         "name": "mapview"
+      },
+      {
+        "name": "webshot"
       },
       {
         "name": "move2"
