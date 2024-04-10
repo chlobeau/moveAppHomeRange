@@ -52,3 +52,5 @@ App returns NULL if there are fewer than 5 locations for all individuals.
 #### Common errors
 ERROR: “Error in getverticeshr.estUD(X[[i]], ...): The grid is too small to allow the estimation of home-range.
 You should rerun kernelUD with a larger extent parameter”. SOLUTION Gradually increase the value of the extent parameter until you no longer receive this error.
+
+ERROR: ./start-process.sh: line 9:   308 Killed: This error likely arises from the resolution (grid size) being unreasonably large to estimate the UD raster  (i.e. 20,000 m [20 km]). SOLUTION Reduce the res value until you no longer receive this error.
