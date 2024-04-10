@@ -21,7 +21,7 @@ The output consists of (i) a zipped shapefile (.shp) with the home-range polygon
 
 
 ### Input data
-Move2 object in Movebank format. 
+Move2 object in Movebank format. App will not accept Move2 objects that have already been split as they are in a list format.
 
 ### Output data
 
@@ -43,6 +43,12 @@ App returns move2_loc, no additional output is produced to be used in subsequent
 
 `Resolution` (res): A number giving the size of the pixel over the UD should be estimated. Unit: `metres`. Default is 200.
 
+`Extent` (ext): A number controlling the extent of the grid used for estimation. Default is 1.
+
 ### Null or error handling
 
 App returns NULL if there are fewer than 5 locations for all individuals.
+
+#### Common errors
+ERROR: “Error in getverticeshr.estUD(X[[i]], ...): The grid is too small to allow the estimation of home-range.
+You should rerun kernelUD with a larger extent parameter”. SOLUTION Gradually increase the value of the extent parameter until you no longer receive this error.

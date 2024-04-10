@@ -13,6 +13,13 @@
       "description": "A number giving the size of the pixel over the UD should be estimated. Unit: `metres`.",
       "defaultValue": 200,
       "type": "INTEGER"
+    },
+    {
+      "id": "ext",
+      "name": "Extent.",
+      "description": "A number controlling the extent of the grid used for estimation.",
+      "defaultValue": 1,
+      "type": "INTEGER"
     }
   ],
   "dependencies": {
@@ -61,7 +68,7 @@
         "author",
         "creator"
       ],
-      "orcid": null,
+      "orcid": "https://orcid.org/0000-0001-8146-2511",
       "affiliation": "SUNY - ESF",
       "affiliationRor": null
     }

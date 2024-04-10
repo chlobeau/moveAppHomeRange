@@ -13,7 +13,12 @@ library('zip')
 ## to display messages to the user in the log file of the App in MoveApps one can use the function from the logger.R file: 
 # logger.fatal(), logger.error(), logger.warn(), logger.info(), logger.debug(), logger.trace()
 
-rFunction = function(data, percent = 95, res = 200){
+rFunction = function(data, percent = 95, res = 200, ext = 1){
+  
+  if(sum(class(data) %in% "move2") == 0)
+  {
+    logger.info("Input data must be a move2 object - check that the prior app does not output a list (did you use the split function?)")
+  }
   
   coords.sf <- st_coordinates(data) |> na.omit()
   
@@ -24,7 +29,8 @@ rFunction = function(data, percent = 95, res = 200){
   } 
     
   # population KUD
-  kernel <- adehabitatHR::kernelUD(SpatialPoints(coords.sf), grid = res) |> getverticeshr(percent)
+  kernel <- adehabitatHR::kernelUD(SpatialPoints(coords.sf), grid = res) |> 
+    adehabitatHR::getverticeshr(percent)
   poly_all <- st_as_sf(kernel) |> st_cast("POLYGON")
   poly_all$area <- st_area(poly_all)
   ud <- poly_all[which.max(poly_all$area),] |> st_set_crs(st_crs(data))
@@ -46,8 +52,8 @@ rFunction = function(data, percent = 95, res = 200){
   coords_split <- lapply(data_split, st_coordinates)
   coords_split <- lapply(coords_split, na.omit)
   coords_split_sp <- lapply(coords_split, SpatialPoints)
-  kernel_split <- lapply(coords_split_sp, adehabitatHR::kernelUD, grid = 200) 
-  kernel_vertices <- lapply(kernel_split, getverticeshr, percent = 95)
+  kernel_split <- lapply(coords_split_sp, adehabitatHR::kernelUD, grid = res, extent = ext) 
+  kernel_vertices <- lapply(kernel_split, getverticeshr, percent)
   kernel_vertices_list <- lapply(kernel_vertices, st_as_sf)
   kernels <- do.call(rbind, kernel_vertices_list)
   
@@ -55,10 +61,10 @@ rFunction = function(data, percent = 95, res = 200){
   poly$id <- row.names(poly)
   
   # make mapview
-  sf <- data_sub |> mutate(id = individual_name_deployment_id)
-  mt_track_id(sf) <- NULL
+  data_sf <- data_sub |> mutate(id = individual_name_deployment_id)
+  mt_track_id(data_sf) <- NULL
   
-  locs <- sf |> dplyr::group_by(id) |> 
+  locs <- data_sf |> dplyr::group_by(id) |> 
     dplyr::summarize(do_union=FALSE) |> sf::st_cast("LINESTRING")
   
   m <- mapview(ud, layer.name = "Population KUD") + 
