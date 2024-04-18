@@ -3,21 +3,21 @@
     {
       "id": "percent",
       "name": "Percent.",
-      "description": "Percentage level for home-range size estimation",
+      "description": "Percentage level for home-range size estimation. For example, '95' will provide an area within which the animal/population has a 95% probability of occurring.",
       "defaultValue": 95,
       "type": "INTEGER"
     },
     {
       "id": "res",
       "name": "Resolution.",
-      "description": "A number giving the size of the pixel over the UD should be estimated. Unit: `metres`.",
+      "description": "The size of the pixels over which the UD should be estimated. Unit: `metres`.",
       "defaultValue": 200,
       "type": "INTEGER"
     },
     {
       "id": "ext",
       "name": "Extent.",
-      "description": "A number controlling the extent of the grid used for estimation.",
+      "description": "A unitless number controlling the extent of the area (grid) used for estimation.",
       "defaultValue": 1,
       "type": "INTEGER"
     }
