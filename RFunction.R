@@ -61,7 +61,7 @@ rFunction = function(data, percent = 95, res = 200, ext = 1){
   poly$id <- row.names(poly)
   
   # make mapview
-  data_sf <- data_sub |> mutate(id = mt_track_id(data_sf))
+  data_sf <- data_sub |> mutate(id = mt_track_id(data_sub))
   mt_track_id(data_sf) <- NULL
   
   locs <- data_sf |> dplyr::group_by(id) |> 
