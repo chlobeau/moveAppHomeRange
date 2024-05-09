@@ -13,7 +13,7 @@ library('zip')
 ## to display messages to the user in the log file of the App in MoveApps one can use the function from the logger.R file: 
 # logger.fatal(), logger.error(), logger.warn(), logger.info(), logger.debug(), logger.trace()
 
-rFunction = function(data, percent = 95, res = 200, ext = 1){
+rFunction = function(data, percent = 95, res = 200, ext = 1, hest = "href"){
   
   if(sum(class(data) %in% "move2") == 0)
   {
@@ -27,9 +27,9 @@ rFunction = function(data, percent = 95, res = 200, ext = 1){
     logger.info("Data need to include at least 5 locations to run kernel UD function. Returning NULL.")
     result <- NULL
   } 
-    
+  
   # population KUD
-  kernel <- adehabitatHR::kernelUD(SpatialPoints(coords.sf), grid = res) |> 
+  kernel <- adehabitatHR::kernelUD(SpatialPoints(coords.sf), grid = res, h = hest) |> 
     adehabitatHR::getverticeshr(percent)
   poly_all <- st_as_sf(kernel) |> st_cast("POLYGON")
   poly_all$area <- st_area(poly_all)
@@ -108,6 +108,5 @@ rFunction = function(data, percent = 95, res = 200, ext = 1){
   
   file.copy(file.path(tmp, file_zip), zipfile, overwrite = TRUE)
   return(data)      
-    
-  }
   
+}

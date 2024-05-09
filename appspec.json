@@ -21,6 +21,13 @@
       "defaultValue": 1,
       "type": "INTEGER"
     }
+    {
+      "id": "hest",
+      "name": "smoothing parameter.",
+      "description": "A character string or a number used for the bandwidth estimator / smoothing parameter.",
+      "defaultValue": "href",
+      "type": "STRING"
+    }
   ],
   "dependencies": {
     "R": [

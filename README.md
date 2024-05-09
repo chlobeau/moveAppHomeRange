@@ -52,6 +52,8 @@ App returns move2_loc, no additional output is produced to be used in subsequent
 
 `Extent` (ext): A unitless number controlling the extent of the area (grid) used for estimation. Default is 1. The number relates to the spatial range of the input data but is not equal to the number of pixels or a geographic distance. Increase in increments of 1 as needed to provide sufficient space for the analysis (see below). 
 
+`Smoothing parameter` (hest): A character string or a numerical value. The default "href" assumes a bivariate normal kernel. Alternatively, the smoothing parameter can be estimated using Least Square Cross Validation (defined in settings as hest = "LSCV") or it may be set to any numeric value. See https://www.rdocumentation.org/packages/adehabitatHR/versions/0.4.21/topics/kernelUD for additional context.
+
 ### Null or error handling
 
 App returns NULL if there are fewer than 5 locations for all individuals.
