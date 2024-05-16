@@ -28,6 +28,10 @@ rFunction = function(data, percent = 95, res = 200, ext = 1, hest = "href"){
     result <- NULL
   } 
   
+  if(!(hest %in% c("href", "LSCV"))){
+    hest <- as.numeric(hest)
+  }
+  
   # population KUD
   kernel <- adehabitatHR::kernelUD(SpatialPoints(coords.sf), grid = res, h = hest) |> 
     adehabitatHR::getverticeshr(percent)
