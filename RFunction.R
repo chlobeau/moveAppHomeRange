@@ -33,7 +33,7 @@ rFunction = function(data, percent = 95, res = 200, ext = 1, hest = "href"){
   }
   
   # population KUD
-  kernel <- adehabitatHR::kernelUD(SpatialPoints(coords.sf), grid = res, h = hest) |> 
+  kernel <- adehabitatHR::kernelUD(SpatialPoints(coords.sf), grid = res, h = hest, extent = ext) |> 
     adehabitatHR::getverticeshr(percent)
   poly_all <- st_as_sf(kernel) |> st_cast("POLYGON")
   poly_all$area <- st_area(poly_all)
@@ -56,7 +56,7 @@ rFunction = function(data, percent = 95, res = 200, ext = 1, hest = "href"){
   coords_split <- lapply(data_split, st_coordinates)
   coords_split <- lapply(coords_split, na.omit)
   coords_split_sp <- lapply(coords_split, SpatialPoints)
-  kernel_split <- lapply(coords_split_sp, adehabitatHR::kernelUD, grid = res, extent = ext) 
+  kernel_split <- lapply(coords_split_sp, adehabitatHR::kernelUD, grid = res, h = hest, extent = ext) 
   kernel_vertices <- lapply(kernel_split, getverticeshr, percent)
   kernel_vertices_list <- lapply(kernel_vertices, st_as_sf)
   kernels <- do.call(rbind, kernel_vertices_list)
