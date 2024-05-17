@@ -20,7 +20,16 @@ rFunction = function(data, percent = 95, res = 200, ext = 1, hest = "href"){
     logger.info("Input data must be a move2 object - check that the prior app does not output a list (did you use the split function?)")
   }
   
-  coords.sf <- st_coordinates(data) |> na.omit()
+  # convert to simple features in metric system
+  CRS = "+proj=lcc +lat_1=50 +lat_2=70 +lat_0=65 +lon_0=-120 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs"
+  
+  data_sf <- data |> mutate(id = mt_track_id(data))
+  mt_track_id(data_sf) <- NULL
+  data_sf_metric <- data_sf |> st_transform(crs = CRS)
+  mapview(data_sf_metric)
+  
+  coords.sf <- st_coordinates(data_sf_metric)
+  coords.sp <- SpatialPoints(coords = coords.sf)
   
   if(nrow(coords.sf) < 5)
   {
@@ -33,11 +42,11 @@ rFunction = function(data, percent = 95, res = 200, ext = 1, hest = "href"){
   }
   
   # population KUD
-  kernel <- adehabitatHR::kernelUD(SpatialPoints(coords.sf), grid = res, h = hest, extent = ext) |> 
+  kernel <- adehabitatHR::kernelUD(coords.sp, grid = res, h = hest, extent = ext) |> 
     adehabitatHR::getverticeshr(percent)
   poly_all <- st_as_sf(kernel) |> st_cast("POLYGON")
   poly_all$area <- st_area(poly_all)
-  ud <- poly_all[which.max(poly_all$area),] |> st_set_crs(st_crs(data))
+  ud <- poly_all[which.max(poly_all$area),] |> st_set_crs(CRS)
   ud$id <- paste0("population homerange - ", percent, "% KUD")
   
   # KUD by individual
@@ -50,7 +59,8 @@ rFunction = function(data, percent = 95, res = 200, ext = 1, hest = "href"){
   } 
   selIDs <- IDs_length$.id[IDs_length$V1 > 5]
   
-  data_sub <- data[mt_track_id(data) %in% selIDs,]
+  data_sub <- data[mt_track_id(data) %in% selIDs,] |> st_transform(CRS)
+  
   data_split <- split(data_sub, mt_track_id(data_sub))
   
   coords_split <- lapply(data_split, st_coordinates)
@@ -61,14 +71,11 @@ rFunction = function(data, percent = 95, res = 200, ext = 1, hest = "href"){
   kernel_vertices_list <- lapply(kernel_vertices, st_as_sf)
   kernels <- do.call(rbind, kernel_vertices_list)
   
-  poly <- st_as_sf(kernels) |> st_cast("POLYGON") |> st_set_crs(st_crs(data))
+  poly <- st_as_sf(kernels) |> st_cast("POLYGON") |> st_set_crs(CRS)
   poly$id <- row.names(poly)
   
   # make mapview
-  data_sf <- data_sub |> mutate(id = mt_track_id(data_sub))
-  mt_track_id(data_sf) <- NULL
-  
-  locs <- data_sf |> dplyr::group_by(id) |> 
+  locs <- data_sf_metric |> dplyr::group_by(id) |> 
     dplyr::summarize(do_union=FALSE) |> sf::st_cast("LINESTRING")
   
   m <- mapview(ud, layer.name = "Population KUD") + 
@@ -79,6 +86,8 @@ rFunction = function(data, percent = 95, res = 200, ext = 1, hest = "href"){
   uds_all <- rbind(poly, ud)
   names(uds_all)[names(uds_all) == "area"] <- paste0("area (km2) - ", percent, "% KUD")
   uds.df <- st_drop_geometry(uds_all)
+  
+  uds_all_orig_crs <- uds_all |> st_transform(st_crs(data))
   
   # output csv
   write.csv(uds.df,file=appArtifactPath("KUD_areas.csv"),row.names=FALSE)
@@ -107,7 +116,7 @@ rFunction = function(data, percent = 95, res = 200, ext = 1, hest = "href"){
   dir.create(tmp)
   on.exit(unlink(tmp, recursive = TRUE, force = TRUE))
   
-  sf::write_sf(uds_all, file.path(tmp, shp_name), delete_layer = TRUE)
+  sf::write_sf(uds_all_orig_crs, file.path(tmp, shp_name), delete_layer = TRUE)
   withr::with_dir(tmp, zip(file_zip, list.files()))
   
   file.copy(file.path(tmp, file_zip), zipfile, overwrite = TRUE)
