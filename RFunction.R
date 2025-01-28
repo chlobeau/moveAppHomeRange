@@ -26,7 +26,7 @@ rFunction = function(data, percent = 95, res = 200, ext = 1, hest = "href"){
   data_sf <- data |> mutate(id = mt_track_id(data))
   mt_track_id(data_sf) <- NULL
   data_sf_metric <- data_sf |> st_transform(crs = CRS)
-  mapview(data_sf_metric)
+  #mapview(data_sf_metric)
   
   coords.sf <- st_coordinates(data_sf_metric)
   coords.sp <- SpatialPoints(coords = coords.sf)
@@ -45,7 +45,7 @@ rFunction = function(data, percent = 95, res = 200, ext = 1, hest = "href"){
   kernel <- adehabitatHR::kernelUD(coords.sp, grid = res, h = hest, extent = ext) |> 
     adehabitatHR::getverticeshr(percent)
   poly_all <- st_as_sf(kernel) |> st_cast("POLYGON")
-  poly_all$area <- st_area(poly_all)
+  poly_all$area <- (st_area(poly_all) |> as.numeric())/1e6 # convert to km2
   ud <- poly_all[which.max(poly_all$area),] |> st_set_crs(CRS)
   ud$id <- paste0("population homerange - ", percent, "% KUD")
   
@@ -73,6 +73,8 @@ rFunction = function(data, percent = 95, res = 200, ext = 1, hest = "href"){
   
   poly <- st_as_sf(kernels) |> st_cast("POLYGON") |> st_set_crs(CRS)
   poly$id <- row.names(poly)
+  
+  poly$area <- (st_area(poly) |> as.numeric())/1e6
   
   # make mapview
   locs <- data_sf_metric |> dplyr::group_by(id) |> 
